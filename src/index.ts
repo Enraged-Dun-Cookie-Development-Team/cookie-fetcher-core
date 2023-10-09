@@ -10,6 +10,7 @@ export * from './fetch/FetchControllerConfig';
 export { JsonDataSource } from './datasource/JsonDataSource';
 export type { DataSourceConfig } from './datasource/DataSourceConfig';
 export type { FetchData } from './fetch/CookieFetcher';
+export type { DataSourceRegisterInfo } from './fetch/DataSourceRegisterInfo';
 
 export async function parseConfig<T = FetchControllerConfig>(configStr: string): Promise<T> {
   const resolveResult = await JsonRefResolver.resolve(json5.parse(configStr));
