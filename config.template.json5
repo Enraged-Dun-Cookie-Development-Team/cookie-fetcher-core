@@ -1,0 +1,89 @@
+{
+  // 全局默认间隔15秒
+  default_interval: 15000,
+  groups: [
+    { name: 'B站-明日方舟', type: 'bilibili:dynamic-by-uid', datasource: [{ uid: '161775300' }] },
+    {
+      name: 'B站-鹰角的其它账号',
+      type: 'bilibili:dynamic-by-uid',
+      datasource: [
+        // 明日方舟终末地
+        { uid: '1265652806' },
+        // 来自星尘
+        { uid: '1883857209' },
+        // 重力井动画
+        { uid: '1554642444' },
+        // CubesCollective
+        { uid: '2123591088' },
+      ],
+      interval: 30000,
+    },
+    {
+      name: '微博-明日方舟Arknights',
+      type: 'weibo:dynamic-by-uid',
+      datasource: [
+        {
+          uid: '6279793937',
+          requestOptions: {
+            appendTimestamp: true,
+            headers: {
+              referer: 'https://m.weibo.cn/u/6279793937',
+              'user-agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36',
+            },
+          },
+        },
+      ],
+    },
+    { name: '微博-明日方舟朝陇山', type: 'weibo:dynamic-by-uid', datasource: [{ uid: '6441489862' }] },
+    { name: '微博-一拾山', type: 'weibo:dynamic-by-uid', datasource: [{ uid: '7506039414' }] },
+    {
+      name: '微博-鹰角的其它账号',
+      type: 'weibo:dynamic-by-uid',
+      datasource: [
+        // 泰拉记事社
+        { uid: '7499841383' },
+        // 鹰角网络
+        { uid: '7461423907' },
+        // 乌柯塔界限OCTAVEDGE
+        { uid: '7683268725', ignoreEmpty: true },
+        // 明日方舟终末地
+        { uid: '7745672941' },
+      ],
+      interval: 20000,
+    },
+    { name: '网易云-塞壬唱片-MSR', type: 'netease-cloud-music:albums-by-artist', datasource: [{ artistId: '32540734' }] },
+    {
+      name: '网易云-Cubes Collective',
+      type: 'netease-cloud-music:albums-by-artist',
+      datasource: [{ artistId: '50653540' }],
+      interval: 30000,
+    },
+    { name: '明日方舟-游戏内公告(安卓)', type: 'arknights-game:announcement', datasource: [{ platform: 'Android' }] },
+    { name: '明日方舟-游戏版本(安卓)', type: 'arknights-game:version', datasource: [{ platform: 'Android' }] },
+    { name: '明日方舟-塞壬唱片官网', type: 'arknights-website:monster-siren', datasource: [{}] },
+    { name: '明日方舟-官网', type: 'arknights-website:official-website', datasource: [{}] },
+    { name: '明日方舟-泰拉记事社官网', type: 'arknights-website:terra-historicus', datasource: [{}] },
+  ],
+  platform: {
+    // B站
+    bilibili: {
+      min_request_interval: 10000,
+    },
+    // 微博
+    weibo: {
+      min_request_interval: 4000,
+    },
+    // 网易云
+    'netease-cloud-music': {
+      min_request_interval: 10000,
+    },
+    // 方舟-游戏内
+    'arknights-game': {
+      min_request_interval: 3000,
+    },
+    // 方舟-网站
+    'arknights-website': {
+      min_request_interval: 3000,
+    },
+  },
+}

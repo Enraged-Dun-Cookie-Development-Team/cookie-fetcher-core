@@ -1,0 +1,10 @@
+.git/
+.idea/
+node_modules/
+dist/
+report/
+coverage/
+package-lock.json
+
+run/**
+!run/**/*.ts
