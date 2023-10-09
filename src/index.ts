@@ -8,6 +8,7 @@ export * from './fetch/FetchController';
 export * from './fetch/FetchResult';
 export * from './fetch/FetchControllerConfig';
 export { JsonDataSource } from './datasource/JsonDataSource';
+export { KeyValueDataSource } from './datasource/KeyValueDataSource';
 export type { DataSourceConfig } from './datasource/DataSourceConfig';
 export type { FetchData } from './fetch/CookieFetcher';
 export type { DataSourceRegisterInfo } from './fetch/DataSourceRegisterInfo';
