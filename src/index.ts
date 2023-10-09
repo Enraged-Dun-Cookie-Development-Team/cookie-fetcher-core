@@ -4,14 +4,15 @@ import json5 from 'json5';
 import clone from 'clone';
 
 export * from './datasource/DataSource';
+export * from './datasource/DataSourceConfig';
+export { JsonDataSource } from './datasource/JsonDataSource';
+export { KeyValueDataSource } from './datasource/KeyValueDataSource';
+
 export * from './fetch/FetchController';
 export * from './fetch/FetchResult';
 export * from './fetch/FetchControllerConfig';
-export { JsonDataSource } from './datasource/JsonDataSource';
-export { KeyValueDataSource } from './datasource/KeyValueDataSource';
-export type { DataSourceConfig } from './datasource/DataSourceConfig';
+export * from './fetch/DataSourceRegisterInfo';
 export type { FetchData } from './fetch/CookieFetcher';
-export type { DataSourceRegisterInfo } from './fetch/DataSourceRegisterInfo';
 
 export async function parseConfig<T = FetchControllerConfig>(configStr: string): Promise<T> {
   const resolveResult = await JsonRefResolver.resolve(json5.parse(configStr));
