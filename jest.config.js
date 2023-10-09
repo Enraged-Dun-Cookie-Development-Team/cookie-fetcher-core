@@ -15,8 +15,7 @@ transform[Object.keys(presets.defaultsESM.transform)[0]] = [
   'ts-jest',
   {
     useESM: true,
-    // 因为在run目录里运行 所以这里要到父目录找文件
-    tsconfig: '../tsconfig.json',
+    tsconfig: './tsconfig.json',
   },
 ];
 
