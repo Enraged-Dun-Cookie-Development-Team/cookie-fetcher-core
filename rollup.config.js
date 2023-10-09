@@ -43,7 +43,7 @@ export default defineConfig([
               content.main = 'index.js';
               content.module = 'index.esm.js';
               content.types = 'index.d.js';
-              content.repository = 'https://github.com/Enraged-Dun-Cookie-Development-Team/cookie-fetcher';
+              content.repository = 'https://github.com/Enraged-Dun-Cookie-Development-Team/cookie-fetcher-core';
               const buildNumber = process.env.BUILD_NUMBER === 'dev' ? 'dev' : parseInt(process.env.BUILD_NUMBER || 'NaN');
               if (!(buildNumber > 0) && buildNumber !== 'dev') {
                 throw new Error(`无效环境变量BUILD_NUMBER：${process.env.BUILD_NUMBER}`);

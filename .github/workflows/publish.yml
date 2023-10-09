@@ -1,0 +1,56 @@
+name: publish
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+          scope: '@enraged-dun-cookie-development-team'
+      - run: npm ci
+      - run: npm test
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+          scope: '@enraged-dun-cookie-development-team'
+      - run: npm ci
+      - run: npm run build
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+      - name: 发布到Github Packages
+        run: npm publish
+        working-directory: dist
+
+  clean-old-packages:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v4
+        with:
+          package-name: cookie-fetcher-core
+          package-type: npm
+          # 只保留最新10个版本
+          min-versions-to-keep: 10

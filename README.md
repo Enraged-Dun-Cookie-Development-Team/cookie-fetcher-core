@@ -2,16 +2,23 @@
 
 配置格式参考接口定义[FetchControllerConfig](./src/fetch/FetchControllerConfig.ts)和模板文件[config.template.json5](./config.template.json5)
 
-需要注意的是：为了规避风险，本仓库不包含实际的各平台请求逻辑，请参考[TestDataSource](./test/utils/TestDataSource.ts)自行实现各平台的请求逻辑
+---
+
+### 项目须知
+
+1. 需要注意的是：为了规避风险，本仓库不包含实际的各平台请求逻辑，请参考[TestDataSource](./test/utils/TestDataSource.ts)自行实现各平台的请求逻辑
+
+2. 本项目使用 AGPLv3 开源协议发布，但下列 Github 组织可不受约束地任意使用本项目：
+   - [Enraged-Dun-Cookie-Development-Team](https://github.com//Enraged-Dun-Cookie-Development-Team)
 
 ---
 
-### 通过 NPM 安装
+### 使用示例
 
 验证配置：
 
 ```typescript
-import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
 
 registerDataSourceType(...); // 注册蹲饼数据源
 const conifg = ...; // 蹲饼配置对象

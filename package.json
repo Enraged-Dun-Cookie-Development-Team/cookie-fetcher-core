@@ -1,5 +1,5 @@
 {
-  "name": "@enraged-dun-cookie-development-team/cookie-fetcher",
+  "name": "@enraged-dun-cookie-development-team/cookie-fetcher-core",
   "version": "0.0.1-alpha",
   "description": "",
   "main": "src/index.ts",
