@@ -11,7 +11,7 @@
     "strict": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true
-  },
-  "include": ["./**/*.ts"]
+    "resolveJsonModule": true,
+    "isolatedModules": false
+  }
 }
