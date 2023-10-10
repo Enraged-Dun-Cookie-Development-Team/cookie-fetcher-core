@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "moduleResolution": "Node",
-    "module": "ES2022",
-    "target": "ES2022",
-    "sourceRoot": "./src/",
-    "outDir": "./dist/",
+    "module": "ESNext",
+    "target": "ESNext",
     "sourceMap": true,
     "noImplicitAny": true,
     "allowJs": false,
@@ -14,6 +12,5 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": false
-  },
-  "include": ["./src/"]
+  }
 }
