@@ -1,11 +1,14 @@
 name: publish
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
     paths:
       - 'src/**'
-  workflow_dispatch:
+      - 'package.json'
+      - 'tsconfig-prod.json'
+      - 'rollup.config.js'
 
 env:
   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
