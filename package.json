@@ -9,7 +9,7 @@
     "prepare": "husky install"
   },
   "author": "Enraged-Dun-Cookie-Development-Team",
-  "license": "AGPL-3.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.28",
     "@sinclair/typebox": "^0.31.17",
