@@ -6,10 +6,7 @@
 
 ### 项目须知
 
-1. 为了规避风险，本仓库不包含实际的各平台请求逻辑，请参考[TestDataSource](./test/utils/TestDataSource.ts)自行实现各平台的请求逻辑
-
-2. 本项目使用 AGPLv3 开源协议发布，但下列 Github 组织可不受协议约束任意使用本项目：
-   - [Enraged-Dun-Cookie-Development-Team](https://github.com//Enraged-Dun-Cookie-Development-Team)
+为了规避风险，本仓库不包含实际的各平台请求逻辑，请参考[TestDataSource](./test/utils/TestDataSource.ts)自行实现各平台的请求逻辑
 
 ---
 
