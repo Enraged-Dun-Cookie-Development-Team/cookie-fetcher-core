@@ -1,59 +1,67 @@
 import { DataSource, DataSourceTypeInfo } from './DataSource';
-import { DataContentKeyValue } from '../fetch/FetchResult';
 import { DataSourceConfig } from './DataSourceConfig';
+import { DataContentKeyValue, DataContentType, PrimitiveWithEmpty } from './DataContent';
 
-const DEFAULT_KEY = 'default';
-
+/**
+ * KV数据源
+ */
+// noinspection JSUnusedGlobalSymbols
 export abstract class KeyValueDataSource extends DataSource {
-  private readonly values: Record<string, unknown> = {};
+  protected values: Record<string, PrimitiveWithEmpty> = {};
+  /**
+   * 暂时只在首次检查新值时初始化
+   */
+  protected inited = false;
 
   /**
    * @see DataSource#constructor
    */
-  protected constructor(type: DataSourceTypeInfo, dataId: string, config: DataSourceConfig) {
+  protected constructor(
+    type: DataSourceTypeInfo,
+    dataId: string,
+    config: DataSourceConfig,
+    private readonly monitorKeys: string[]
+  ) {
     super(type, dataId, config);
   }
 
-  protected setValue(name: string, value: unknown): void;
-  protected setValue(value: unknown): void;
-  protected setValue(_key: unknown, _value?: unknown) {
-    const { key, value } = this.extraKV(_key, _value);
-    this.values[key] = value;
-  }
-
-  protected getValue<T = unknown>(key = DEFAULT_KEY) {
-    return this.values[key] as T;
-  }
-
-  protected hasKey(name = DEFAULT_KEY) {
-    return !!this.values[name];
-  }
-
-  protected createContent<T = unknown>(key: string, newValue: T): DataContentKeyValue<T> {
-    return {
-      type: 'kv',
-      key: key,
-      oldValue: this.values[key] as T,
-      newValue: newValue,
-    };
-  }
-
-  protected checkIfValueChange(key: string, newValue: string) {
-    let content: DataContentKeyValue<string> | undefined;
-    if (newValue && this.hasKey(key)) {
-      if (newValue !== this.getValue(key)) {
-        content = this.createContent(key, newValue);
-      }
+  /**
+   * @param newValues 新的值
+   * @param ignoreMissingKey 是否忽略newValues中未提供的值，方便只更新部分值，默认为true。如果此参数为false则newValues中未出现的key也会视为更新(相当于新值是undefined)
+   */
+  protected createContentIfChanged(
+    newValues: Record<string, PrimitiveWithEmpty>,
+    ignoreMissingKey = true
+  ): DataContentKeyValue | undefined {
+    if (!this.inited) {
+      this.values = newValues;
+      this.inited = true;
+      return;
     }
-    this.setValue('key', newValue);
-    return content;
-  }
-
-  private extraKV(name: unknown, value?: unknown) {
-    if (typeof value === 'undefined' || typeof name !== 'string') {
-      return { key: DEFAULT_KEY, value: name };
-    } else {
-      return { key: name, value: value };
+    try {
+      const changed: string[] = [];
+      for (const key of this.monitorKeys) {
+        if (newValues.hasOwnProperty(key)) {
+          if (newValues[key] !== this.values[key]) {
+            changed.push(key);
+          }
+        } else if (!ignoreMissingKey) {
+          changed.push(key);
+        }
+      }
+      if (changed.length === 0) return;
+      if (ignoreMissingKey) {
+        newValues = Object.assign(Object.assign({}, this.values), newValues);
+      }
+      return {
+        type: DataContentType.KV,
+        oldValue: this.values,
+        // 由于newValues允许只提供部分值，这里进行一次浅拷贝合并
+        newValue: newValues,
+        changeKeys: changed,
+      };
+    } finally {
+      this.values = newValues;
     }
   }
 }

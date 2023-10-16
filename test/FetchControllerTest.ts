@@ -6,7 +6,7 @@ import { FixedOffsetZone, Settings as DateTimeSettings } from 'luxon';
 import { testDataSourceRegisterInfo } from './utils/TestDataSource';
 
 registerDataSourceType(testDataSourceRegisterInfo);
-const logger = createTestLogger('fetcher');
+const logger = createTestLogger('test');
 
 describe('蹲饼器测试', () => {
   test('检测非法配置', () => {

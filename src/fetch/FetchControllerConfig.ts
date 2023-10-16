@@ -121,10 +121,12 @@ export const FetchControllerConfigSchema = Type.Object({
   ),
 });
 
+// 为什么不用typebox自带的类型生成来着？忘记了 好像是因为他生成不了注释看着不爽
 // 这一段是验证FetchControllerConfigSchema的定义是否符合FetchControllerConfig的定义
 // 因为FetchControllerConfigSchema是手写而非根据FetchControllerConfig生成的，所以需要验证来避免出错
 // 原理是通过用泛型互相作为子类型定义(如果两个类型互为对方的子类型，则可以推定两个类型相等)
 // 值得一提的是出现可选值(两个类型中定义的可选值都是这样)可能会导致它涉及到项不会被验证，原理应该两边定义的类型正好能互相兼容
+// 如果能编译成功则两个类型相等，否则不相等
 type FetchControllerConfigSchema = Static<typeof FetchControllerConfigSchema>;
 // eslint-disable-next-line
 type Check<A extends FetchControllerConfig, B extends FetchControllerConfigSchema> = never;

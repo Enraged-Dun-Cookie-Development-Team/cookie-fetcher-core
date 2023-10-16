@@ -1,56 +1,60 @@
 import { DataSource, DataSourceTypeInfo } from './DataSource';
 import { createPatch } from 'rfc6902';
-import { DataContentJson } from '../fetch/FetchResult';
+import { Pointer } from 'rfc6902/pointer';
 import { DataSourceConfig } from './DataSourceConfig';
+import { DataContentJson, DataContentType } from './DataContent';
 
-const DEFAULT_KEY = 'default';
-
-export abstract class JsonDataSource extends DataSource {
-  private readonly jsonValues: Record<string, unknown> = {};
+/**
+ * Json数据源
+ */
+// noinspection JSUnusedGlobalSymbols
+export abstract class JsonDataSource<T = unknown> extends DataSource {
+  protected oldValue: T | undefined;
+  /**
+   * 暂时只在首次检查新值时初始化
+   */
+  protected inited = false;
 
   /**
    * @see DataSource#constructor
    */
-  protected constructor(type: DataSourceTypeInfo, dataId: string, config: DataSourceConfig) {
+  protected constructor(
+    type: DataSourceTypeInfo,
+    dataId: string,
+    config: DataSourceConfig,
+    private readonly monitorPointers: Pointer[]
+  ) {
     super(type, dataId, config);
   }
 
-  protected set(name: string, value: unknown): void;
-  protected set(value: unknown): void;
-  protected set(_key: unknown, _value?: unknown) {
-    const { key, value } = this.extraKV(_key, _value);
-    this.jsonValues[key] = value;
-  }
-
-  protected hasKey(name = DEFAULT_KEY) {
-    return !!this.jsonValues[name];
-  }
-
-  protected diff(name: string, value: unknown): void;
-  protected diff(value: unknown): void;
-  protected diff(_key: unknown, _value?: unknown) {
-    const { key, value } = this.extraKV(_key, _value);
-    const oldValue = this.jsonValues[key];
-    return createPatch(oldValue, value);
-  }
-
-  protected createContent<T = unknown>(oldValue: T, newValue: T): DataContentJson {
-    const patch = createPatch(oldValue, newValue);
-    const paths = patch.map((it) => it.path);
-    return {
-      type: 'json',
-      oldValue: oldValue,
-      newValue: newValue,
-      patch: patch,
-      changePaths: paths,
-    };
-  }
-
-  private extraKV(name: unknown, value?: unknown) {
-    if (typeof value === 'undefined' || typeof name !== 'string') {
-      return { key: DEFAULT_KEY, value: name };
-    } else {
-      return { key: name, value: value };
+  protected createContentIfChanged(newValue: T): DataContentJson | undefined {
+    if (!this.inited) {
+      this.oldValue = newValue;
+      this.inited = true;
+      return;
+    }
+    try {
+      const patch = createPatch(this.oldValue, newValue);
+      if (patch.length === 0) return;
+      let changed = false;
+      for (const pointer of this.monitorPointers) {
+        const subPatch = createPatch(pointer.get(this.oldValue), pointer.get(newValue));
+        if (subPatch.length > 0) {
+          changed = true;
+          break;
+        }
+      }
+      if (!changed) return;
+      const paths = patch.map((it) => it.path);
+      return {
+        type: DataContentType.JSON,
+        oldValue: this.oldValue,
+        newValue: newValue,
+        patch: patch,
+        changePaths: paths,
+      };
+    } finally {
+      this.oldValue = newValue;
     }
   }
 }

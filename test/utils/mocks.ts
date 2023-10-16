@@ -1,4 +1,4 @@
-import { CookieIdsPersister } from '../../src/datasource/DataSourceConfig';
+import { CookieIdsPersister } from '../../src';
 
 export const mockCookieIdsPersister: CookieIdsPersister = {
   readCookieIds(): Promise<string[] | false> {

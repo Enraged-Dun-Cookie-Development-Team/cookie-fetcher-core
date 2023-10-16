@@ -29,7 +29,6 @@ export default {
   testEnvironment: 'node',
   roots: ['<rootDir>/src', '<rootDir>/test'],
   testMatch: ['**/test/**/*.ts', '!**/test/utils/**'],
-  transformIgnorePatterns: ['/node_modules/(?!(bilibili-dynamic)/)'],
   transform: transform,
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',

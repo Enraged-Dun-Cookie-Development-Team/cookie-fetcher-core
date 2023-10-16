@@ -1,5 +1,4 @@
-import { DataItem, DataSource, DataSourceConfig, DataSourceTypeInfo } from '../../src';
-import { DataSourceRegisterInfo } from '../../src/fetch/DataSourceRegisterInfo';
+import { DataContentType, DataItem, DataSource, DataSourceConfig, DataSourceRegisterInfo, DataSourceTypeInfo } from '../../src';
 import { Static, Type } from '@sinclair/typebox';
 
 const typeInfo = new DataSourceTypeInfo('bilibili', 'test', 1);
@@ -16,10 +15,10 @@ export class TestDataSource extends DataSource {
   }
 
   protected async fetchOnce(): Promise<DataItem[]> {
-    this.sendGet('https://localhost/test');
+    await this.sendGet('https://localhost/test');
     return [
       this.createDataItem({
-        type: 'common',
+        type: DataContentType.COMMON,
         id: Math.random().toString(),
         rawContent: Math.random().toString(),
       }),

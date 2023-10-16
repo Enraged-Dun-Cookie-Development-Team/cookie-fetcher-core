@@ -1,4 +1,4 @@
-import { DataContentUnion, DataItem, FetchResult, Timestamp } from '../fetch/FetchResult';
+import { FetchResult } from '../fetch/FetchResult';
 import { CommonRequestOptions, Http } from '@enraged-dun-cookie-development-team/common/request';
 import { Logger } from '@enraged-dun-cookie-development-team/common/logger';
 import { Schema } from 'ajv';
@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { ErrorObject } from 'ajv/lib/types';
 import { DataSourceConfig } from './DataSourceConfig';
 import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json';
+import { DataContentType, DataContentUnion, DataItem, Timestamp } from './DataContent';
 
 /**
  * 显示信息
@@ -21,18 +22,17 @@ export interface DisplayInfo {
   readonly name: string;
 }
 
-export interface CacheInfo<T> {
-  id: string;
-  content: T;
-}
-
 export class DataSourceTypeInfo {
   /**
    * @param platform 唯一的平台名
    * @param type 相同平台下的唯一数据源类型
    * @param reqCountEachFetch 每次蹲饼的请求数量
    */
-  constructor(readonly platform: string, readonly type: string, readonly reqCountEachFetch: number = 1) {}
+  constructor(
+    readonly platform: string,
+    readonly type: string,
+    readonly reqCountEachFetch: number = 1
+  ) {}
 
   get id() {
     return this.platform + ':' + this.type;
@@ -47,6 +47,7 @@ export type DataSourceId = ReturnType<typeof DataSourceId>;
 
 const PERSIST_CACHE_COUNT = 100;
 
+// noinspection JSUnusedGlobalSymbols
 export abstract class DataSource {
   protected readonly logger: Logger;
   readonly id: DataSourceId;
@@ -63,7 +64,11 @@ export abstract class DataSource {
    * @param dataId 数据源id，相同平台唯一，不同平台可以重复(用于内部识别)
    * @param config 自定义配置
    */
-  protected constructor(readonly type: DataSourceTypeInfo, dataId: string, readonly config: DataSourceConfig) {
+  protected constructor(
+    readonly type: DataSourceTypeInfo,
+    dataId: string,
+    readonly config: DataSourceConfig
+  ) {
     this.logger = config.logger;
     this.id = DataSourceId(type, dataId);
     this.idStr = `${this.id.typeId}:${this.id.dataId}`;
@@ -140,13 +145,13 @@ export abstract class DataSource {
     const newCookies: DataItem[] = [];
     const newCookieIds: string[] = [];
     for (const item of items) {
-      if (item.type === 'common') {
+      if (item.type === DataContentType.COMMON) {
         if (!this.cookieIdCacheMap[item.id]) {
           this.cookieIdCacheMap[item.id] = true;
           newCookies.push(item);
           newCookieIds.push(item.id);
         }
-      } else if (item.type === 'json' || item.type === 'kv') {
+      } else if (item.type === DataContentType.JSON || item.type === DataContentType.KV) {
         newCookies.push(item);
       }
     }
