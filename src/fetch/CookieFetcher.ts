@@ -11,7 +11,10 @@ export class CookieFetcher {
    * @param group 数据源组
    * @param logger 日志器
    */
-  constructor(readonly group: DataSourceGroup, private readonly logger: Logger) {}
+  constructor(
+    readonly group: DataSourceGroup,
+    private readonly logger: Logger
+  ) {}
 
   get groupName() {
     return this.group.name;
@@ -47,9 +50,12 @@ export class CookieFetcher {
 
   private log(fetchData: FetchData) {
     if (fetchData.success) {
-      this.logger.debug({ fetchData: fetchData }, `[${this.groupName}]蹲饼成功`);
+      this.logger.debug({ fetchData: fetchData }, `[${this.groupName}]蹲饼成功(${this.group.currentSource.idStr})`);
     } else {
-      this.logger.warn({ fetchData: fetchData, error: fetchData.error }, `[${this.groupName}]蹲饼失败：${fetchData.error.toString()}`);
+      this.logger.warn(
+        { fetchData: fetchData, error: fetchData.error },
+        `[${this.groupName}]蹲饼失败(${this.group.currentSource.idStr})：${fetchData.error.toString()}`
+      );
     }
   }
 }
