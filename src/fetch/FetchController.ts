@@ -210,7 +210,7 @@ export class FetchController {
           }
         }
         const logNextFetch = (argNextFetch: number, reason: string) => {
-          this.logger.debug(
+          this.logger.trace(
             `下次蹲饼时间：${argNextFetch}，原因：${reason}，时间范围：${timeRangeToString(currentRange)}，相关计划：${JSON.stringify(
               fetchSchedule.map((it) => it.getHealthInfo())
             )}`
@@ -244,7 +244,7 @@ export class FetchController {
       } else {
         // 无蹲饼计划，延时到下一个时间范围
         nextFetch = rangeEndTime(currentRange, this.lastRangeCheckTime);
-        this.logger.debug(`下次蹲饼时间：${nextFetch}，原因：无蹲饼计划，时间范围：${timeRangeToString(currentRange)}`);
+        this.logger.trace(`下次蹲饼时间：${nextFetch}，原因：无蹲饼计划，时间范围：${timeRangeToString(currentRange)}`);
       }
       this.task = setTimeout(() => {
         this.runCycle();
