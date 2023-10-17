@@ -68,7 +68,7 @@ export type DataContentJson<T = unknown> = {
   /**
    * patch中涉及到的全部路径，代表有哪些路径被修改了
    */
-  changePaths: string[];
+  changedPaths: string[];
 };
 
 export type PrimitiveWithEmpty = string | boolean | number | undefined | null;
@@ -93,7 +93,7 @@ export type DataContentKeyValue = {
   /**
    * 所有更新的key
    */
-  changeKeys: string[];
+  changedKeys: string[];
 };
 export type DataContentUnion = DataContentCommon | DataContentJson | DataContentKeyValue;
 /**

@@ -58,7 +58,7 @@ export abstract class KeyValueDataSource extends DataSource {
         oldValue: this.values,
         // 由于newValues允许只提供部分值，这里进行一次浅拷贝合并
         newValue: newValues,
-        changeKeys: changed,
+        changedKeys: changed,
       };
     } finally {
       this.values = newValues;

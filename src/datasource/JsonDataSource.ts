@@ -51,7 +51,7 @@ export abstract class JsonDataSource<T = unknown> extends DataSource {
         oldValue: this.oldValue,
         newValue: newValue,
         patch: patch,
-        changePaths: paths,
+        changedPaths: paths,
       };
     } finally {
       this.oldValue = newValue;
