@@ -30,13 +30,13 @@ describe('KeyValue数据源测试', () => {
       type: DataContentType.KV,
       oldValue: { a: 'a1', b: 'b1' },
       newValue: { a: 'a2', b: 'b1' },
-      changeKeys: ['a'],
+      changedKeys: ['a'],
     });
     expect(source.createContentIfChanged({ a: 'a2', b: 'b2' })).toStrictEqual({
       type: DataContentType.KV,
       oldValue: { a: 'a2', b: 'b1' },
       newValue: { a: 'a2', b: 'b2' },
-      changeKeys: ['b'],
+      changedKeys: ['b'],
     });
     expect(source.createContentIfChanged({ a: 'a2', b: 'b2', c: 1 })).toStrictEqual(undefined);
   });
