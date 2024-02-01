@@ -2,7 +2,7 @@ import { DataSource, DataSourceTypeInfo } from './DataSource';
 import { createPatch } from 'rfc6902';
 import { Pointer } from 'rfc6902/pointer';
 import { DataSourceConfig } from './DataSourceConfig';
-import { DataContentJson, DataContentType } from './DataContent';
+import { DataContentJson, DataContentType } from './DataItem';
 
 /**
  * Json数据源

@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { ErrorObject } from 'ajv/lib/types';
 import { DataSourceConfig } from './DataSourceConfig';
 import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json';
-import { DataContentType, DataContentUnion, DataItem, Timestamp } from './DataContent';
+import { DataContentType, DataContentUnion, DataItem, Timestamp } from './DataItem';
 
 /**
  * 显示信息

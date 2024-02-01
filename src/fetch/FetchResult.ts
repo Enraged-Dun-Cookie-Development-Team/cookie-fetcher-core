@@ -1,4 +1,4 @@
-import { DataItem } from '../datasource/DataContent';
+import { DataItem } from '../datasource/DataItem';
 
 export class FetchResult {
   /**

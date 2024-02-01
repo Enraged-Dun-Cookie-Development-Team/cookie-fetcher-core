@@ -5,7 +5,7 @@ import clone from 'clone';
 
 export * from './datasource/DataSource';
 export * from './datasource/DataSourceConfig';
-export * from './datasource/DataContent';
+export * from './datasource/DataItem';
 export { JsonDataSource } from './datasource/JsonDataSource';
 export { KeyValueDataSource } from './datasource/KeyValueDataSource';
 

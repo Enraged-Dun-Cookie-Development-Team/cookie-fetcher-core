@@ -1,6 +1,6 @@
 import { DataSource, DataSourceTypeInfo } from './DataSource';
 import { DataSourceConfig } from './DataSourceConfig';
-import { DataContentKeyValue, DataContentType, PrimitiveWithEmpty } from './DataContent';
+import { DataContentKeyValue, DataContentType, PrimitiveWithEmpty } from './DataItem';
 
 /**
  * KV数据源
