@@ -51,12 +51,18 @@ export abstract class KeyValueDataSource extends DataSource {
       }
       if (changed.length === 0) return;
       if (ignoreMissingKey) {
+        // 由于newValues允许只提供部分值，这里进行一次浅拷贝合并
         newValues = Object.assign(Object.assign({}, this.values), newValues);
+      } else {
+        for (const key of this.monitorKeys) {
+          if (!newValues.hasOwnProperty(key)) {
+            newValues[key] = undefined;
+          }
+        }
       }
       return {
         type: DataContentType.KV,
         oldValue: this.values,
-        // 由于newValues允许只提供部分值，这里进行一次浅拷贝合并
         newValue: newValues,
         changedKeys: changed,
       };
