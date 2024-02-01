@@ -158,13 +158,29 @@ export class FetchController {
     if (!this.started) return false;
     if (this.task) clearTimeout(this.task);
     if (this.lastPromise) await this.lastPromise;
-    if (this.lastRange) {
-      const sourceShutdownPromiseList = this.lastRange.schedules
-        .flatMap((it) => it.fetcher.group.getSourceList())
-        .map((it) => it.gracefulShutdown());
-      await Promise.allSettled(sourceShutdownPromiseList);
-    }
     this.started = false;
+    if (this.lastRange) {
+      const timeRangeSourceList = this.lastRange.schedules.flatMap((it) => it.fetcher.group.getSourceList());
+      const currentSourceList = this.lastRange.schedules.map((it) => it.fetcher.group.currentSource);
+      const sourceShutdownPromiseList = timeRangeSourceList.map((it) => it.gracefulShutdown());
+      await new Promise((r) => {
+        const timeoutId = setTimeout(() => {
+          this.logger.warn('蹲饼控制器停止等待超时！');
+          wrapEventEmit(this.events, 'stop_timeout', {
+            source_list: {
+              time_range: timeRangeSourceList.map((it) => it.idStr),
+              current: currentSourceList.map((it) => it.idStr),
+              fetching: this.lastRange!.schedules.filter((it) => it.isFetching).map((it) => it.fetcher.group.currentSource),
+            },
+          });
+          r(null);
+        }, 30 * 1000);
+        Promise.allSettled(sourceShutdownPromiseList).then((res) => {
+          clearTimeout(timeoutId);
+          r(res);
+        });
+      });
+    }
     wrapEventEmit(this.events, 'stop');
     return true;
   }
