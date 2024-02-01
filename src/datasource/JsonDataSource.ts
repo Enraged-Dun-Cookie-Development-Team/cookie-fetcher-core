@@ -27,7 +27,16 @@ export abstract class JsonDataSource<T = unknown> extends DataSource {
     super(type, dataId, config);
   }
 
-  protected createContentIfChanged(newValue: T): DataContentJson | undefined {
+  protected createContentIfChanged(checkValue: T): DataContentJson | undefined {
+    let newValue: T;
+    if (Array.isArray(checkValue)) {
+      newValue = [] as T;
+    } else {
+      newValue = {} as T;
+    }
+    for (const pointer of this.monitorPointers) {
+      pointer.set(newValue, pointer.get(checkValue));
+    }
     if (!this.inited) {
       this.oldValue = newValue;
       this.inited = true;

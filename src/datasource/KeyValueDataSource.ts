@@ -26,13 +26,19 @@ export abstract class KeyValueDataSource extends DataSource {
   }
 
   /**
-   * @param newValues 新的值
+   * @param checkValues 要检查的值
    * @param ignoreMissingKey 是否忽略newValues中未提供的值，方便只更新部分值，默认为true。如果此参数为false则newValues中未出现的key也会视为更新(相当于新值是undefined)
    */
   protected createContentIfChanged(
-    newValues: Record<string, PrimitiveWithEmpty>,
+    checkValues: Record<string, PrimitiveWithEmpty>,
     ignoreMissingKey = true
   ): DataContentKeyValue | undefined {
+    let newValues: Record<string, PrimitiveWithEmpty> = {};
+    for (const key of this.monitorKeys) {
+      if (checkValues.hasOwnProperty(key)) {
+        newValues[key] = checkValues[key];
+      }
+    }
     if (!this.inited) {
       this.values = newValues;
       this.inited = true;
