@@ -14,6 +14,10 @@ type TimestampNormal = {
 };
 type TimestampNone = {
   /**
+   * 用于使类型提示更友好
+   */
+  timestamp?: undefined;
+  /**
    * 没有时间戳
    */
   timestampPrecision: 'none';
