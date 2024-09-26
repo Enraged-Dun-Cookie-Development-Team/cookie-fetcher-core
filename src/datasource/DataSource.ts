@@ -159,8 +159,7 @@ export abstract class DataSource {
     }
     if (this.config.persistCookieIds) {
       if (newCookieIds.length > 0) {
-        this.cookieIdCacheListForPersist?.listAccess(newCookieIds);
-        // this.cookieIdCacheListForPersist.splice(0, this.cookieIdCacheListForPersist.length - PERSIST_CACHE_COUNT); // 不删除cookieIdCacheMap里的旧饼id，避免出现因为各种原因数据里出现旧饼然后被当成新饼的情况
+        this.cookieIdCacheListForPersist?.dataItemListAccess(items);
       }
       if (newCookieIds.length > 0 || this.cookieIdCacheListForPersist?.getSize() === 0) {
         this.lastPersistWritePromise = this.config.persistCookieIds.writeCookieIds(this, this.cookieIdCacheListForPersist.getCacheList());
