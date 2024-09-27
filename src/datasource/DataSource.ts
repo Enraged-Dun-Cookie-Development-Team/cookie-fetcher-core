@@ -7,6 +7,8 @@ import { ErrorObject } from 'ajv/lib/types';
 import { DataSourceConfig } from './DataSourceConfig';
 import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json';
 import { DataContentType, DataContentUnion, DataItem, Timestamp } from './DataItem';
+import { LRUCache } from './DataSourceCache';
+
 
 /**
  * 显示信息
@@ -55,7 +57,7 @@ export abstract class DataSource {
 
   protected cookieIdCacheInited = false;
   private cookieIdCacheMap: Record<string, boolean> = {};
-  private cookieIdCacheListForPersist: string[] = [];
+  private cookieIdCacheListForPersist: LRUCache = new LRUCache(PERSIST_CACHE_COUNT);
   private readonly initPromise: Promise<unknown>;
   private lastPersistWritePromise: Promise<unknown> | undefined;
 
@@ -77,7 +79,7 @@ export abstract class DataSource {
       this.initPromise = Promise.allSettled([
         config.persistCookieIds.readCookieIds(this).then((list) => {
           if (list) {
-            this.cookieIdCacheListForPersist = list;
+            this.cookieIdCacheListForPersist.listAccess(list);
             list.forEach((id) => {
               this.cookieIdCacheMap[id] = true;
             });
@@ -157,11 +159,10 @@ export abstract class DataSource {
     }
     if (this.config.persistCookieIds) {
       if (newCookieIds.length > 0) {
-        this.cookieIdCacheListForPersist.push(...newCookieIds);
-        this.cookieIdCacheListForPersist.splice(0, this.cookieIdCacheListForPersist.length - PERSIST_CACHE_COUNT); // 不删除cookieIdCacheMap里的旧饼id，避免出现因为各种原因数据里出现旧饼然后被当成新饼的情况
+        this.cookieIdCacheListForPersist?.dataItemListAccess(items);
       }
-      if (newCookieIds.length > 0 || this.cookieIdCacheListForPersist.length === 0) {
-        this.lastPersistWritePromise = this.config.persistCookieIds.writeCookieIds(this, this.cookieIdCacheListForPersist);
+      if (newCookieIds.length > 0 || this.cookieIdCacheListForPersist?.getSize() === 0) {
+        this.lastPersistWritePromise = this.config.persistCookieIds.writeCookieIds(this, this.cookieIdCacheListForPersist.getCacheList());
       }
     }
     return newCookies;
