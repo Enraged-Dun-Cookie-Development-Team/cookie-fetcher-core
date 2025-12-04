@@ -13,7 +13,8 @@ type Minutes = '00' | '15' | '30' | '45';
  */
 export type TimeStr = `${Hours}:${Minutes}` | `24:00`;
 
-export const TimeStrRegex = /^([01][0-9]|2[0-4]):(00|15|30|45)$/;
+// TODO typebox更新为1.0的时候要把这里string改为regexp
+export const TimeStrRegex = '^([01][0-9]|2[0-4]):(00|15|30|45)$';
 
 /**
  * 蹲饼器配置
@@ -103,7 +104,9 @@ export const FetchControllerConfigSchema = Type.Object({
       interval_by_time_range: Type.Optional(
         Type.Array(
           Type.Object({
-            time_range: Type.Unsafe<[TimeStr, TimeStr]>(Type.Tuple([Type.RegEx(TimeStrRegex), Type.RegEx(TimeStrRegex)])),
+            time_range: Type.Unsafe<[TimeStr, TimeStr]>(
+              Type.Tuple([Type.String({ pattern: TimeStrRegex }), Type.String({ pattern: TimeStrRegex })])
+            ),
             interval: Type.Number({ ...intervalLimitOptions(), minimum: 0 }),
           }),
           { minItems: 1 }
