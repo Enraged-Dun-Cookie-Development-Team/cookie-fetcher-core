@@ -1,4 +1,4 @@
-import { CommonRequestOptions } from '@enraged-dun-cookie-development-team/common/request';
+import { CommonRequestOptions, HttpClient } from '@enraged-dun-cookie-development-team/common/request';
 import { Logger } from '@enraged-dun-cookie-development-team/common/logger';
 import { DataSource } from './DataSource';
 
@@ -10,6 +10,10 @@ export interface DataSourceConfig {
    * 日志器
    */
   logger: Logger;
+  /**
+   * 使用指定的httpClient实例进行请求
+   */
+  httpClient?: HttpClient;
   /**
    * 请求参数，会覆盖数据源提供的参数
    */

@@ -9,7 +9,6 @@ import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json'
 import { DataContentType, DataContentUnion, DataItem, Timestamp } from './DataItem';
 import { LRUCache } from './DataSourceCache';
 
-
 /**
  * 显示信息
  */
@@ -135,7 +134,11 @@ export abstract class DataSource {
   }
 
   async sendGet(url: string | URL, options?: CommonRequestOptions): Promise<string> {
-    return await Http.get(url, { timeout: 30 * 1000, ...options, ...this.config.requestOptions });
+    if (this.config.httpClient) {
+      return await this.config.httpClient.get(url, { timeout: 30 * 1000, ...options, ...this.config.requestOptions });
+    } else {
+      return await Http.get(url, { timeout: 30 * 1000, ...options, ...this.config.requestOptions });
+    }
   }
 
   /**
