@@ -11,8 +11,8 @@
   "author": "Enraged-Dun-Cookie-Development-Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.36",
-    "@sinclair/typebox": "^0.34.41",
+    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.37",
+    "@sinclair/typebox": "0.31.17",
     "@stoplight/json-ref-resolver": "^3.1.6",
     "@swc/core": "^1.15.3",
     "ajv": "^8.17.1",
